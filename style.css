@@ -1,0 +1,342 @@
+/* ── Reset & Base ─────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  /* Prevents iOS from auto-inflating font sizes */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  font-family: sans-serif;
+  background: #f5f5f5;
+  color: #222;
+  min-height: 100vh;
+  min-height: 100dvh; /* dynamic viewport height — accounts for mobile browser chrome */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Screen Visibility ────────────────────────────────────── */
+.screen {
+  display: none;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  align-items: center;
+  justify-content: center;
+}
+
+.screen.active {
+  display: flex;
+}
+
+/* ── Landing ──────────────────────────────────────────────── */
+.landing-content {
+  text-align: center;
+  width: 100%;
+  max-width: 560px;
+  padding: 2rem 1.25rem;
+}
+
+.landing-content h1 {
+  font-size: clamp(1.6rem, 6vw, 2.2rem);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.landing-content p {
+  font-size: clamp(0.95rem, 4vw, 1.1rem);
+  color: #555;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+/* ── Quiz Layout ──────────────────────────────────────────── */
+.quiz-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 720px;
+
+  /* 
+    On mobile the "Next" button must always be reachable without scrolling.
+    We use a sticky footer pattern: the wrapper fills the full viewport height,
+    the question/grid area grows to fill available space, and the button stays
+    pinned at the bottom.
+  */
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 1.5rem 1rem 1.25rem;
+  gap: 1.25rem;
+}
+
+.question-area {
+  text-align: center;
+  /* Allow the question area to flex-grow so it pushes the grid and button down naturally */
+  flex-shrink: 0;
+}
+
+.question-counter {
+  font-size: 0.8rem;
+  color: #888;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.question-area h2 {
+  font-size: clamp(1.1rem, 5vw, 1.6rem);
+  line-height: 1.4;
+}
+
+/* ── Answer Grid ──────────────────────────────────────────── */
+.answer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  /* Grow to fill space between question and button */
+  flex: 1;
+  align-content: start;
+}
+
+.answer-box {
+  background: #fff;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem 0.75rem;
+  font-size: clamp(0.85rem, 3.5vw, 1rem);
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.15s, background 0.15s;
+
+  /* 
+    Use min-height in rems rather than px so boxes don't become
+    too small on narrow screens, but can still grow with content.
+  */
+  min-height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.35;
+
+  /* 
+    Prevent tap highlight flash on iOS/Android 
+    and make the touch target comfortably large
+  */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.answer-box:hover {
+  border-color: #999;
+  background: #fafafa;
+}
+
+.answer-box.selected {
+  border-color: #333;
+  background: #222;
+  color: #fff;
+}
+
+/* ── Buttons ──────────────────────────────────────────────── */
+.btn-primary {
+  background: #222;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+
+  /* 
+    44px is Apple's recommended minimum tap target height.
+    padding gives us that comfortably on any screen.
+  */
+  padding: 0.9rem 2.5rem;
+  font-size: clamp(1rem, 4vw, 1.1rem);
+  cursor: pointer;
+  transition: opacity 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.btn-primary:active {
+  opacity: 0.75;
+}
+
+/* Hover only applies on devices that actually have a hover state (i.e. not touch) */
+@media (hover: hover) {
+  .btn-primary:hover {
+    opacity: 0.8;
+  }
+}
+
+.btn-next {
+  /* 
+    Sticky bottom button — stays visible above the mobile keyboard/nav bar.
+    margin-top: auto pushes it to the bottom of the flex column.
+  */
+  margin-top: auto;
+  width: 100%;
+  padding: 1rem;
+  font-size: clamp(1rem, 4vw, 1.1rem);
+  font-weight: bold;
+  background: #222;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  letter-spacing: 0.03em;
+
+  /* Safe area inset for iPhones with a home bar */
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.btn-next:disabled {
+  background: #ccc;
+  color: #888;
+  cursor: not-allowed;
+}
+
+@media (hover: hover) {
+  .btn-next:not(:disabled):hover {
+    opacity: 0.8;
+  }
+}
+
+.btn-next:not(:disabled):active {
+  opacity: 0.75;
+}
+
+/* ── Results ──────────────────────────────────────────────── */
+.results-content {
+  text-align: center;
+  width: 100%;
+  max-width: 560px;
+  padding: 2rem 1.25rem;
+}
+
+.results-content h1 {
+  font-size: clamp(1.6rem, 6vw, 2rem);
+  margin-bottom: 0.75rem;
+}
+
+.results-subtitle {
+  color: #555;
+  margin-bottom: 1.5rem;
+  font-size: clamp(0.95rem, 4vw, 1.05rem);
+  line-height: 1.5;
+}
+
+.results-list {
+  list-style: none;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.result-card {
+  background: #fff;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  /* Link reset — remove underline and inherited colour */
+  text-decoration: none;
+  color: inherit;
+
+  /* Subtle press feedback on tap */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: border-color 0.15s;
+}
+
+@media (hover: hover) {
+  .result-card:hover {
+    border-color: #999;
+  }
+}
+
+.result-card:active {
+  border-color: #333;
+}
+
+.result-img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+.result-name {
+  padding: 0.85rem 1rem;
+  font-size: clamp(1rem, 4vw, 1.15rem);
+  font-weight: bold;
+  text-align: center;
+}
+
+/* ── Tablet and up — restore desktop sizing ───────────────── */
+@media (min-width: 600px) {
+  .quiz-wrapper {
+    /* On wider screens the full-height column isn't needed */
+    min-height: unset;
+    padding: 2rem 1.5rem;
+    gap: 1.5rem;
+  }
+
+  .btn-next {
+    /* Remove the safe-area offset on non-mobile */
+    padding-bottom: 1rem;
+    margin-top: 0;
+  }
+
+  .answer-box {
+    min-height: 80px;
+    padding: 1.25rem 1rem;
+  }
+}
+
+/* ── Loading Screen ───────────────────────────────────────── */
+.loading-content {
+  text-align: center;
+  padding: 2rem 1.25rem;
+  max-width: 480px;
+  width: 100%;
+}
+
+.loading-content h2 {
+  margin-bottom: 1.25rem;
+  font-size: 1.4rem;
+}
+
+.loading-log {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-align: left;
+}
+
+.loading-log li {
+  font-size: 0.95rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid #ddd;
+}
+
+.loading-log li.ok    { border-color: #4caf50; color: #2e7d32; }
+.loading-log li.fail  { border-color: #f44336; color: #c62828; }
+.loading-log li.info  { border-color: #1976d2; color: #1565c0; }

@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+
+    <!-- Loading Screen -->
+    <div id="screen-loading" class="screen active">
+      <div class="loading-content">
+        <h2>Loading...</h2>
+        <ul id="loading-log" class="loading-log"></ul>
+      </div>
+    </div>
+
+    <!-- Landing Screen -->
+    <div id="screen-landing" class="screen active">
+      <div class="landing-content">
+        <h1>Which Dice Suits Your Inner Adventurer?</h1>
+        <p>Go on an epic quest to find your perfect set of dice.</p>
+        <button id="btn-start" class="btn-primary">Start Adventure!</button>
+      </div>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div id="screen-quiz" class="screen">
+      <div class="quiz-wrapper">
+        <div class="question-area">
+          <p id="question-counter" class="question-counter"></p>
+          <h2 id="question-text"></h2>
+        </div>
+        <div id="answer-grid" class="answer-grid"></div>
+        <button id="btn-next" class="btn-next" disabled>Next Encounter!</button>
+      </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="screen-results" class="screen">
+      <div class="results-content">
+        <h1>Claim Your Loot!</h1>
+        <p class="results-subtitle">
+          Based on your choices, the following dice are your destiny:
+        </p>
+        <ol id="results-list" class="results-list"></ol>
+        <button id="btn-restart" class="btn-primary">Quest Again!</button>
+      </div>
+    </div>
+
+    <script src="quiz.js"></script>
+  </body>
+</html>

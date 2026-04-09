@@ -1,0 +1,82 @@
+[
+ {
+   "UID": 1,
+   "Question": "Pick a seasonal town to start your adventure:",
+   "Answers": [
+      "1A",
+      "1B",
+      "1C",
+      "1D"
+   ]
+},
+ {
+   "UID": 2,
+   "Question": "If you were a wizard, what spellbook would you choose to study:",
+   "Answers": [
+      "2A",
+      "2B",
+      "2C",
+      "2D"
+   ]
+},
+ {
+   "UID": 3,
+   "Question": "You need to bypass a locked door, do you:",
+   "Answers": [
+      "3A",
+      "3B",
+      "3C",
+      "3D"
+   ]
+},
+ {
+   "UID": 4,
+   "Question": "You've been caught! You need to escaoe this deadly:",
+   "Answers": [
+      "4A",
+      "4B",
+      "4C",
+      "4D"
+   ]
+},
+ {
+   "UID": 5,
+   "Question": "You're wounded, you look at the gash to discover that you bleed:",
+   "Answers": [
+      "5A",
+      "5B",
+      "5C",
+      "5D"
+   ]
+},
+ {
+   "UID": 6,
+   "Question": "Suddenly! You are attacked by a monstrous:",
+   "Answers": [
+      "6A",
+      "6B",
+      "6C",
+      "6D"
+   ]
+},
+ {
+   "UID": 7,
+   "Question": "If you were a dragon, would you rather have a hoard of: ",
+   "Answers": [
+      "7A",
+      "7B",
+      "7C",
+      "7D"
+   ]
+},
+ {
+   "UID": 8,
+   "Question": "You return home, and the Mayor bestows upon you:",
+   "Answers": [
+      "8A",
+      "8B",
+      "8C",
+      "8D"
+   ]
+}
+]
