@@ -1,7 +1,7 @@
 [
  {
    "UID": 1,
-   "Question": "Pick a seasonal town to start your adventure:",
+   "Question": "You start your adventure in a seasonal town called:",
    "Answers": [
       "1A",
       "1B",
@@ -11,7 +11,7 @@
 },
  {
    "UID": 2,
-   "Question": "If you were a wizard, what spellbook would you choose to study:",
+   "Question": "The town wizard offers to lend you a spellbook, you choose to study:",
    "Answers": [
       "2A",
       "2B",
@@ -21,7 +21,7 @@
 },
  {
    "UID": 3,
-   "Question": "You need to bypass a locked door, do you:",
+   "Question": "You need to bypass a locked door, so you:",
    "Answers": [
       "3A",
       "3B",
@@ -31,7 +31,7 @@
 },
  {
    "UID": 4,
-   "Question": "You've been caught! You need to escaoe this deadly:",
+   "Question": "You've been caught tresspassing! You need to escape this deadly:",
    "Answers": [
       "4A",
       "4B",
@@ -51,7 +51,7 @@
 },
  {
    "UID": 6,
-   "Question": "Suddenly! You are attacked by a monstrous:",
+   "Question": "Suddenly! The town is attacked by a monstrous:",
    "Answers": [
       "6A",
       "6B",
@@ -61,7 +61,7 @@
 },
  {
    "UID": 7,
-   "Question": "If you were a dragon, would you rather have a hoard of: ",
+   "Question": "You make it to the dragon's lair, and find a hoard of: ",
    "Answers": [
       "7A",
       "7B",
@@ -71,7 +71,7 @@
 },
  {
    "UID": 8,
-   "Question": "You return home, and the Mayor bestows upon you:",
+   "Question": "Upon returning home, the Mayor bestows upon you:",
    "Answers": [
       "8A",
       "8B",
