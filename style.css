@@ -221,7 +221,10 @@ body {
   text-align: center;
   width: 100%;
   max-width: 560px;
-  padding: 2rem 1.25rem;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .results-content h1 {
@@ -241,7 +244,9 @@ body {
   margin-bottom: 2rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 1.25rem;
+  width: 100%;
 }
 
 .result-card {
@@ -253,14 +258,30 @@ body {
   flex-direction: column;
   align-items: center;
 
-  /* Link reset — remove underline and inherited colour */
   text-decoration: none;
   color: inherit;
 
-  /* Subtle press feedback on tap */
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
   transition: border-color 0.15s;
+
+  /* Card fills the available width within the padded content area */
+  width: 100%;
+}
+
+.result-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
+.result-name {
+  padding: 0.85rem 1rem;
+  font-size: clamp(1rem, 4vw, 1.2rem);
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
 }
 
 @media (hover: hover) {
@@ -271,20 +292,6 @@ body {
 
 .result-card:active {
   border-color: #333;
-}
-
-.result-img {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  display: block;
-}
-
-.result-name {
-  padding: 0.85rem 1rem;
-  font-size: clamp(1rem, 4vw, 1.15rem);
-  font-weight: bold;
-  text-align: center;
 }
 
 /* ── Tablet and up — restore desktop sizing ───────────────── */

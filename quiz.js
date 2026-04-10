@@ -1,40 +1,4 @@
 (async () => {
-  // const questionsData = [
-  //   {
-  //     UID: "1",
-  //     Question: "How do you prefer to spend a free afternoon?",
-  //     Answers: ["1A", "1B", "1C", "1D"]
-  //   },
-  //   {
-  //     UID: "2",
-  //     Question: "Pick the environment you feel most at home in.",
-  //     Answers: ["2A", "2B", "2C", "2D"]
-  //   },
-  //   {
-  //     UID: "3",
-  //     Question: "What drives most of your decisions?",
-  //     Answers: ["3A", "3B", "3C", "3D"]
-  //   }
-  // ];
-
-  // const answersData = [
-  //   // Question 1
-  //   { UID: "1A", Text: "Reading a good book",       Three: ["251920"], Two: ["251921"], One: ["251919"] },
-  //   { UID: "1B", Text: "Hiking outdoors",            Three: ["251920"], Two: ["251921"], One: ["251919"] },
-  //   { UID: "1C", Text: "Hanging out with friends",   Three: ["251920"], Two: ["251921"], One: ["251919"] },
-  //   { UID: "1D", Text: "Creating something new",     Three: ["251920"], Two: ["251921"], One: ["251919"] },
-  //   // Question 2
-  //   { UID: "2A", Text: "A cosy library",             Three: ["251920"], Two: ["251921"], One: ["251919"] },
-  //   { UID: "2B", Text: "A mountain trail",           Three: ["251920"], Two: ["251921"], One: ["251919"] },
-  //   { UID: "2C", Text: "A bustling café",            Three: ["251920"], Two: ["251921"], One: ["251919"] },
-  //   { UID: "2D", Text: "A bright studio",            Three: ["251920"], Two: ["251921"], One: ["251919"] },
-  //   // Question 3
-  //   { UID: "3A", Text: "Logic and reason",           Three: ["251920"], Two: ["251921"], One: ["251919"] },
-  //   { UID: "3B", Text: "Adventure and instinct",     Three: ["251920"], Two: ["251921"], One: ["251919"] },
-  //   { UID: "3C", Text: "People and connection",      Three: ["251920"], Two: ["251921"], One: ["251919"] },
-  //   { UID: "3D", Text: "Creativity and expression",  Three: ["251920"], Two: ["251921"], One: ["251919"] },
-  // ];
-
   // ── Loading Helpers ─────────────────────────────────────────────────────────
   const screenLoading = document.getElementById("screen-loading");
   const screenLanding = document.getElementById("screen-landing");
@@ -97,21 +61,6 @@
     log("Also check the browser console (F12) for more detail", "info");
     return; // Stop execution here — do not proceed to quiz setup
   }
-
-  //   log("Starting data load...");
-
-  //   let diceData;
-
-  //   try {
-  //     // Load sequentially so the log is easy to read top-to-bottom
-  //     diceData      = await loadJSON("dice.json");
-  //     log("All files loaded successfully — starting quiz", "ok");
-  //   } catch (err) {
-  //     log("One or more files failed to load. Quiz cannot start.", "fail");
-  //     log("Check that all .json files are in the same folder as index.html", "info");
-  //     log("Also check the browser console (F12) for more detail", "info");
-  //     return; // Stop execution here — do not proceed to quiz setup
-  //   }
 
   // ── Lookup Maps ─────────────────────────────────────────────────────────────
   log(`Building lookup maps...`);
@@ -259,58 +208,58 @@
     });
   }
 
-  async function showResults() {
-    const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-    const top3 = sorted.slice(0, 3);
+ async function showResults() {
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const top3   = sorted.slice(0, 3);
 
-    resultsList.innerHTML = "";
-    showScreen(screenResults);
+  resultsList.innerHTML = "";
+  showScreen(screenResults);
 
-    const fetchPromises = top3.map(([uid]) => {
-      const dice = diceMap[uid];
-      if (!dice) return Promise.resolve(null);
+  const fetchPromises = top3.map(([uid]) => {
+    const dice = diceMap[uid];
+    if (!dice) return Promise.resolve(null);
 
-      // Use an <a> tag instead of <li> so the whole card is a native link
-      const card = document.createElement("a");
-      card.classList.add("result-card");
-      card.href = dice.Link;
-      card.target = "_blank"; // opens in a new tab
-      card.rel = "noopener noreferrer"; // security best practice for _blank
+    const li = document.createElement("a");
+    li.classList.add("result-card");
+    li.href   = dice.Link;
+    li.target = "_blank";
+    li.rel    = "noopener noreferrer";
 
-      const img = document.createElement("img");
-      img.classList.add("result-img");
-      img.alt = dice.Name;
+    const img = document.createElement("img");
+    img.classList.add("result-img");
+    img.alt = dice.Name;
+    img.src = "Placeholder_Image-_LPG_Transparent.webp";
 
-      const name = document.createElement("p");
-      name.classList.add("result-name");
-      name.textContent = dice.Name;
+    const name = document.createElement("p");
+    name.classList.add("result-name");
+    name.textContent = dice.Name;
 
-      card.appendChild(img);
-      card.appendChild(name);
-      resultsList.appendChild(card);
+    li.appendChild(img);
+    li.appendChild(name);
+    resultsList.appendChild(li);
 
-      return fetch(dice.Link)
-        .then((res) => {
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          return res.text();
-        })
-        .then((html) => {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(html, "text/html");
-          const fotoImg = doc.querySelector("img.fotorama__img");
-          if (fotoImg) {
-            img.src = new URL(fotoImg.getAttribute("src"), dice.Link).href;
-          } else {
-            img.style.display = "none";
-          }
-        })
-        .catch(() => {
-          img.style.display = "none";
-        });
-    });
+    return fetch(dice.Link)
+      .then(res => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.text();
+      })
+      .then(html => {
+        const parser  = new DOMParser();
+        const doc     = parser.parseFromString(html, "text/html");
+        const fotoImg = doc.querySelector("img.fotorama__img");
+        if (fotoImg) {
+          const resolvedSrc = new URL(fotoImg.getAttribute("src"), dice.Link).href;
+          img.src = resolvedSrc;
+        }
+        // If no fotorama__img is found we simply leave the placeholder in place
+      })
+      .catch(() => {
+        // Fetch failed — placeholder stays, no further action needed
+      });
+  });
 
-    await Promise.all(fetchPromises);
-  }
+  await Promise.all(fetchPromises);
+}
 
   // ── Event Listeners ─────────────────────────────────────────────────────────
   btnStart.addEventListener("click", () => {
