@@ -63,35 +63,45 @@ body {
   flex-direction: column;
   width: 100%;
   max-width: 720px;
-
-  /* 
-    On mobile the "Next" button must always be reachable without scrolling.
-    We use a sticky footer pattern: the wrapper fills the full viewport height,
-    the question/grid area grows to fill available space, and the button stays
-    pinned at the bottom.
-  */
   min-height: 100vh;
   min-height: 100dvh;
   padding: 1.5rem 1rem 1.25rem;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .question-area {
   text-align: center;
-  /* Allow the question area to flex-grow so it pushes the grid and button down naturally */
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  /* Fills all remaining space between the top of the page and the answer grid */
+  flex: 1;
 }
 
 .question-counter {
   font-size: 0.8rem;
   color: #888;
-  margin-bottom: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
+.question-image-box {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #e8e8e8;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  /* Non-interactive */
+  pointer-events: none;
+  user-select: none;
+}
+
 .question-area h2 {
-  font-size: clamp(1.1rem, 5vw, 1.6rem);
+  /* Bumped up by 6pt — base was clamp(1.1rem, 5vw, 1.6rem) */
+  font-size: clamp(1.55rem, 5vw, 2.05rem);
   line-height: 1.4;
 }
 
@@ -100,35 +110,27 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
-  /* Grow to fill space between question and button */
-  flex: 1;
-  align-content: start;
+  flex-shrink: 0;
 }
 
 .answer-box {
   background: #fff;
   border: 2px solid #ddd;
   border-radius: 8px;
-  padding: 1rem 0.75rem;
-  font-size: clamp(0.85rem, 3.5vw, 1rem);
+  padding: 0.75rem;
+  /* Bumped up by 3pt — base was clamp(0.85rem, 3.5vw, 1rem) */
+  font-size: clamp(1.075rem, 3.5vw, 1.225rem);
   cursor: pointer;
   text-align: center;
   transition: border-color 0.15s, background 0.15s;
 
-  /* 
-    Use min-height in rems rather than px so boxes don't become
-    too small on narrow screens, but can still grow with content.
-  */
-  min-height: 5rem;
+  /* 3:4 ratio — slightly taller than wide */
+  aspect-ratio: 4 / 3;
   display: flex;
   align-items: center;
   justify-content: center;
   line-height: 1.35;
 
-  /* 
-    Prevent tap highlight flash on iOS/Android 
-    and make the touch target comfortably large
-  */
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
   user-select: none;
@@ -176,13 +178,11 @@ body {
 }
 
 .btn-next {
-  /* 
-    Sticky bottom button — stays visible above the mobile keyboard/nav bar.
-    margin-top: auto pushes it to the bottom of the flex column.
-  */
-  margin-top: auto;
+  margin-top: 0;
+  flex-shrink: 0;
   width: 100%;
   padding: 1rem;
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
   font-size: clamp(1rem, 4vw, 1.1rem);
   font-weight: bold;
   background: #222;
@@ -192,10 +192,6 @@ body {
   cursor: pointer;
   transition: opacity 0.15s;
   letter-spacing: 0.03em;
-
-  /* Safe area inset for iPhones with a home bar */
-  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
-
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 }
@@ -215,7 +211,6 @@ body {
 .btn-next:not(:disabled):active {
   opacity: 0.75;
 }
-
 /* ── Results ──────────────────────────────────────────────── */
 .results-content {
   text-align: center;
@@ -295,23 +290,16 @@ body {
 }
 
 /* ── Tablet and up — restore desktop sizing ───────────────── */
+/* ── Tablet and up ────────────────────────────────────────── */
 @media (min-width: 600px) {
   .quiz-wrapper {
-    /* On wider screens the full-height column isn't needed */
     min-height: unset;
     padding: 2rem 1.5rem;
     gap: 1.5rem;
   }
 
   .btn-next {
-    /* Remove the safe-area offset on non-mobile */
     padding-bottom: 1rem;
-    margin-top: 0;
-  }
-
-  .answer-box {
-    min-height: 80px;
-    padding: 1.25rem 1rem;
   }
 }
 

@@ -62,6 +62,34 @@
     return; // Stop execution here — do not proceed to quiz setup
   }
 
+    // ── Data Cleanup ────────────────────────────────────────────────────────────
+  function cleanAnswers(data) {
+    return data.map(answer => {
+      const cleaned = { ...answer };
+
+      ["Three", "Two", "One"].forEach(key => {
+        if (Array.isArray(cleaned[key])) {
+          // Keep only entries that are numeric (or numeric strings)
+          const filtered = cleaned[key].filter(entry => !isNaN(entry) && entry !== "" && entry !== null);
+          if (filtered.length > 0) {
+            cleaned[key] = filtered;
+          } else {
+            // Array is empty after filtering — discard the field entirely
+            delete cleaned[key];
+          }
+        } else {
+          // Field is missing or not an array — discard it
+          delete cleaned[key];
+        }
+      });
+
+      return cleaned;
+    });
+  }
+
+  answersData = cleanAnswers(answersData);
+  log(`Answers data cleaned — ${answersData.length} entries processed`, "ok");
+
   // ── Lookup Maps ─────────────────────────────────────────────────────────────
   log(`Building lookup maps...`);
 
@@ -125,7 +153,7 @@
   log("Validation complete — preparing to transition...", "info");
   console.log("[INIT] About to set timeout for screen transition");
 
-  await new Promise(resolve => setTimeout(resolve, 800));
+  await new Promise((resolve) => setTimeout(resolve, 800));
 
   console.log("[INIT] Timeout complete — calling showScreen(screenLanding)");
   console.log("[INIT] screenLanding element:", screenLanding);
@@ -162,7 +190,7 @@
 
     selectedAnswerUID = null;
     btnNext.disabled = true;
-    btnNext.textContent = isLast ? "See Results" : "Next";
+    btnNext.textContent = isLast ? "See Results" : "Next Encounter!";
 
     questionCounter.textContent = `Question ${index + 1} of ${total}`;
     questionText.textContent = question.Question;
@@ -197,69 +225,65 @@
     const answer = answersMap[answerUID];
     if (!answer) return;
 
-    (answer.Three ?? []).forEach((uid) => {
-      if (uid in scores) scores[uid] += 3;
-    });
-    (answer.Two ?? []).forEach((uid) => {
-      if (uid in scores) scores[uid] += 2;
-    });
-    (answer.One ?? []).forEach((uid) => {
-      if (uid in scores) scores[uid] += 1;
-    });
+    (answer.Three ?? []).forEach(uid => { if (String(uid) in scores) scores[String(uid)] += 3; });
+    (answer.Two   ?? []).forEach(uid => { if (String(uid) in scores) scores[String(uid)] += 2; });
+    (answer.One   ?? []).forEach(uid => { if (String(uid) in scores) scores[String(uid)] += 1; });
   }
 
- async function showResults() {
-  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-  const top3   = sorted.slice(0, 3);
+  //── Show Results ─────────────────────────────────────────────────────────────────
+  async function showResults() {
+    const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+    const top3 = sorted.slice(0, 3);
 
-  resultsList.innerHTML = "";
-  showScreen(screenResults);
+    resultsList.innerHTML = "";
+    showScreen(screenResults);
 
-  const fetchPromises = top3.map(([uid]) => {
-    const dice = diceMap[uid];
-    if (!dice) return Promise.resolve(null);
+    const fetchPromises = top3.map(([uid]) => {
+      const dice = diceMap[uid];
+      if (!dice) return Promise.resolve(null);
 
-    const li = document.createElement("a");
-    li.classList.add("result-card");
-    li.href   = dice.Link;
-    li.target = "_blank";
-    li.rel    = "noopener noreferrer";
+      const li = document.createElement("a");
+      li.classList.add("result-card");
+      li.href = dice.Link;
+      li.target = "_blank";
+      li.rel = "noopener noreferrer";
 
-    const img = document.createElement("img");
-    img.classList.add("result-img");
-    img.alt = dice.Name;
-    img.src = "Placeholder_Image-_LPG_Transparent.webp";
+      const img = document.createElement("img");
+      img.classList.add("result-img");
+      img.alt = dice.Name;
+      img.src = "Placeholder_Image-_LPG_Transparent.webp";
 
-    const name = document.createElement("p");
-    name.classList.add("result-name");
-    name.textContent = dice.Name;
+      const name = document.createElement("p");
+      name.classList.add("result-name");
+      name.textContent = dice.Name;
 
-    li.appendChild(img);
-    li.appendChild(name);
-    resultsList.appendChild(li);
+      li.appendChild(img);
+      li.appendChild(name);
+      resultsList.appendChild(li);
 
-    return fetch(dice.Link)
-      .then(res => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.text();
-      })
-      .then(html => {
-        const parser  = new DOMParser();
-        const doc     = parser.parseFromString(html, "text/html");
-        const fotoImg = doc.querySelector("img.fotorama__img");
-        if (fotoImg) {
-          const resolvedSrc = new URL(fotoImg.getAttribute("src"), dice.Link).href;
-          img.src = resolvedSrc;
-        }
-        // If no fotorama__img is found we simply leave the placeholder in place
-      })
-      .catch(() => {
-        // Fetch failed — placeholder stays, no further action needed
-      });
-  });
+      return fetch(dice.Link)
+        .then((res) => {
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return res.text();
+        })
+        .then((html) => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, "text/html");
+          const fotoImg = doc.querySelector("img.fotorama__img");
+          if (fotoImg) {
+            const resolvedSrc = new URL(fotoImg.getAttribute("src"), dice.Link)
+              .href;
+            img.src = resolvedSrc;
+          }
+          // If no fotorama__img is found we simply leave the placeholder in place
+        })
+        .catch(() => {
+          // Fetch failed — placeholder stays, no further action needed
+        });
+    });
 
-  await Promise.all(fetchPromises);
-}
+    await Promise.all(fetchPromises);
+  }
 
   // ── Event Listeners ─────────────────────────────────────────────────────────
   btnStart.addEventListener("click", () => {

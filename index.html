@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-
     <!-- Loading Screen -->
     <div id="screen-loading" class="screen active">
       <div class="loading-content">
@@ -17,11 +16,13 @@
     </div>
 
     <!-- Landing Screen -->
-    <div id="screen-landing" class="screen active">
+    <div id="screen-landing" class="screen">
       <div class="landing-content">
         <h1>Which Dice Suits Your Inner Adventurer?</h1>
         <p>Go on an epic quest to find your perfect set of dice.</p>
-        <button id="btn-start" class="btn-primary">Start Adventure!</button>
+        <button type="button" id="btn-start" class="btn-primary">
+          Start Adventure!
+        </button>
       </div>
     </div>
 
@@ -33,7 +34,9 @@
           <h2 id="question-text"></h2>
         </div>
         <div id="answer-grid" class="answer-grid"></div>
-        <button id="btn-next" class="btn-next" disabled>Next Encounter!</button>
+        <button type="button" id="btn-next" class="btn-next" disabled>
+          Next Encounter!
+        </button>
       </div>
     </div>
 
@@ -45,7 +48,9 @@
           Based on your choices, the following dice are your destiny:
         </p>
         <ol id="results-list" class="results-list"></ol>
-        <button id="btn-restart" class="btn-primary">Quest Again!</button>
+        <button type="button" id="btn-restart" class="btn-primary">
+          Quest Again!
+        </button>
       </div>
     </div>
 
